@@ -9,3 +9,6 @@ include(":search-activity")
 include(":core:data")
 include(":core:common")
 include(":core:ai")
+
+include(":calendar")
+include("family")
