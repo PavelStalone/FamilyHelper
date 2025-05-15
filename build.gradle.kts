@@ -32,6 +32,8 @@ subprojects {
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
+        implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
+
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
         testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
