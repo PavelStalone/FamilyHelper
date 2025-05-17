@@ -12,3 +12,4 @@ include(":core:ai")
 
 include(":calendar")
 include("family")
+include(":auth")
