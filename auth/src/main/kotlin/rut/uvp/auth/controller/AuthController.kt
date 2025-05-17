@@ -6,6 +6,7 @@ import rut.uvp.auth.dto.AuthResponse
 import rut.uvp.auth.dto.LoginRequest
 import rut.uvp.auth.dto.RegisterRequest
 import rut.uvp.auth.service.AuthService
+import jakarta.validation.Valid
 
 @RestController
 @RequestMapping("/auth")
@@ -15,12 +16,12 @@ class AuthController(
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    fun register(@RequestBody request: RegisterRequest): AuthResponse {
+    fun register(@Valid @RequestBody request: RegisterRequest): AuthResponse {
         return authService.register(request)
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody request: LoginRequest): AuthResponse {
+    fun login(@Valid @RequestBody request: LoginRequest): AuthResponse {
         return authService.login(request)
     }
 } 
