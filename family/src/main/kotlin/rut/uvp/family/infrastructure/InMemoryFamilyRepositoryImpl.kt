@@ -56,6 +56,10 @@ internal class InMemoryFamilyRepositoryImpl : FamilyRepository {
         return family
     }
 
+    override fun findMemberByUserId(userId: String, family: Family): FamilyMember? {
+        return store[family]?.find { member -> member.userId == userId }
+    }
+
     override fun getMembersByRelationship(
         family: Family,
         relationship: Relationship,

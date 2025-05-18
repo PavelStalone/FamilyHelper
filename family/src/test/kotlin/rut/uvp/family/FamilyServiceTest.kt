@@ -41,7 +41,7 @@ internal class FamilyServiceTest {
 
     @Test
     fun `get brother by son`() {
-        val members = familyService.getMembersByRelationship(
+        val members = familyService.findMembersByRelationship(
             family = family,
             relativeFamilyMember = son,
             relationship = Relationship(levelRelation = 0, levelProximity = 0),
@@ -54,7 +54,7 @@ internal class FamilyServiceTest {
 
     @Test
     fun `get grandfather by son`() {
-        val members = familyService.getMembersByRelationship(
+        val members = familyService.findMembersByRelationship(
             family = family,
             relativeFamilyMember = son,
             relationship = Relationship(levelRelation = -2, levelProximity = 0),
@@ -67,7 +67,7 @@ internal class FamilyServiceTest {
 
     @Test
     fun `get cousin sister by son`() {
-        val members = familyService.getMembersByRelationship(
+        val members = familyService.findMembersByRelationship(
             family = family,
             relativeFamilyMember = son,
             relationship = Relationship(levelRelation = 0, levelProximity = 1),
@@ -80,7 +80,7 @@ internal class FamilyServiceTest {
 
     @Test
     fun `get son by cousin`() {
-        val members = familyService.getMembersByRelationship(
+        val members = familyService.findMembersByRelationship(
             family = family,
             relativeFamilyMember = cousin,
             relationship = Relationship(levelRelation = 0, levelProximity = 1),
@@ -214,6 +214,7 @@ internal class FamilyServiceTest {
         gender: Gender = Gender.MALE,
     ): FamilyMember = FamilyMember(
         id = UUID.randomUUID().toString(),
+        userId = UUID.randomUUID().toString(),
         name = name,
         gender = gender,
         family = emptySet(),

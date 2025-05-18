@@ -105,13 +105,14 @@ internal class OllamaConfig {
                     Правила работы:
                         Спрашивай о желаемой дате и времени.
                         Будь дружелюбным, позитивным, поддерживай атмосферу заботы и внимания к каждому члену семьи.
+                        Используй Русский язык.
                 """.trimIndent()
             )
             .defaultAdvisors(
                 MessageChatMemoryAdvisor(chatMemory, "ChatMemory", 5),
                 LoggerAdvisor(),
             )
-            .defaultTools(systemTools)
+//            .defaultTools(systemTools)
             .build()
     }
 }

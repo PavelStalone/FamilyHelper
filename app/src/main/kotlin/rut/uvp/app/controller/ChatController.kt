@@ -31,6 +31,7 @@ class ChatController(
 
         val response = chatClient.prompt(messageRequest.message)
             .tools(tools)
+            .toolContext(mapOf(FamilyTools.FAMILY_ID to messageRequest.familyId))
             .stream()
             .content()
 
@@ -54,5 +55,8 @@ class ChatController(
         return response
     }
 
-    data class MessageRequest(val message: String)
+    data class MessageRequest(
+        val message: String,
+        val familyId: String,
+    )
 }

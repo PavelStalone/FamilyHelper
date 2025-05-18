@@ -12,6 +12,7 @@ internal interface FamilyRepository {
     fun getByFamilyCode(familyCode: String): Family?
     fun addMember(family: Family, member: FamilyMember)
     fun createFamily(owner: FamilyMember, familyName: String): Family
+    fun findMemberByUserId(userId: String, family: Family): FamilyMember?
     fun getMembersByRelationship(
         family: Family,
         relationship: Relationship,
