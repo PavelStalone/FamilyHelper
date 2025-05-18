@@ -6,9 +6,10 @@ rootProject.name = "FamilyHelper"
 
 include(":app")
 include(":search-activity")
+include(":calendar")
+include(":family")
+include(":auth")
+
 include(":core:data")
 include(":core:common")
 include(":core:ai")
-
-include(":calendar")
-include("family")

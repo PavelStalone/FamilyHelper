@@ -53,3 +53,4 @@ store/
 /docker/*
 !/docker/*compose*
 !/docker/*infrastructure*
+/.idea/
