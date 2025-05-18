@@ -5,7 +5,7 @@ import rut.uvp.family.domain.model.FamilyMember
 import rut.uvp.family.domain.model.Gender
 import rut.uvp.family.domain.model.Relationship
 
-interface FamilyRepository {
+internal interface FamilyRepository {
 
     fun getById(familyId: String): Family?
     fun createFamilyCode(family: Family): String
@@ -16,6 +16,6 @@ interface FamilyRepository {
         family: Family,
         relationship: Relationship,
         gender: Gender,
-        name: String?
+        name: String?,
     ): List<FamilyMember>
 }
