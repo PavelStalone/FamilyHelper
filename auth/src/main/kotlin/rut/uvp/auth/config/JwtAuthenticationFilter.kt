@@ -9,11 +9,15 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
+import rut.uvp.auth.infrastructure.repository.UserRepositoryJpa
 import rut.uvp.auth.util.JwtUtil
+import rut.uvp.auth.util.asDomain
+import kotlin.jvm.optionals.getOrNull
 
 @Component
 internal class JwtAuthenticationFilter(
     private val jwtUtil: JwtUtil,
+    private val userRepository: UserRepositoryJpa,
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
@@ -21,22 +25,30 @@ internal class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val authHeader = request.getHeader("Authorization")
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        runCatching {
+            val authHeader = request.getHeader("Authorization")
+            requireNotNull(authHeader)
+            require(authHeader.startsWith("Bearer "))
+
             val token = authHeader.substring(7)
-            if (jwtUtil.validateToken(token)) {
-                val userId = jwtUtil.extractUserId(token)
-                if (userId != null && SecurityContextHolder.getContext().authentication == null) {
-                    val auth = UsernamePasswordAuthenticationToken(
-                        userId,
-                        null,
-                        listOf(SimpleGrantedAuthority("ROLE_USER"))
-                    )
-                    auth.details = WebAuthenticationDetailsSource().buildDetails(request)
-                    SecurityContextHolder.getContext().authentication = auth
-                }
-            }
+            require(jwtUtil.validateToken(token))
+
+            val userId = jwtUtil.extractUserId(token)
+            requireNotNull(userId)
+            require(SecurityContextHolder.getContext().authentication == null)
+
+            val user = userRepository.findById(userId).getOrNull()
+            requireNotNull(user)
+
+            val auth = UsernamePasswordAuthenticationToken(
+                user.asDomain(),
+                null,
+                listOf(SimpleGrantedAuthority("ROLE_USER"))
+            )
+            auth.details = WebAuthenticationDetailsSource().buildDetails(request)
+            SecurityContextHolder.getContext().authentication = auth
         }
+
         filterChain.doFilter(request, response)
     }
 } 

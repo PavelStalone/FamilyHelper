@@ -1,8 +1,5 @@
 package rut.uvp.app.controller
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PostMapping
