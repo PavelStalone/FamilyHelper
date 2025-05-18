@@ -12,7 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 import rut.uvp.auth.util.JwtUtil
 
 @Component
-class JwtAuthenticationFilter(
+internal class JwtAuthenticationFilter(
     private val jwtUtil: JwtUtil,
 ) : OncePerRequestFilter() {
 

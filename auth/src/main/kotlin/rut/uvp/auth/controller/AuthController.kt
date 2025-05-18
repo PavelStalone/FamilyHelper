@@ -2,15 +2,15 @@ package rut.uvp.auth.controller
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import rut.uvp.auth.dto.AuthResponse
-import rut.uvp.auth.dto.LoginRequest
-import rut.uvp.auth.dto.RegisterRequest
+import rut.uvp.auth.domain.model.AuthResponse
+import rut.uvp.auth.domain.model.LoginRequest
+import rut.uvp.auth.domain.model.RegisterRequest
 import rut.uvp.auth.service.AuthService
 import jakarta.validation.Valid
 
 @RestController
 @RequestMapping("/auth")
-class AuthController(
+internal class AuthController(
     private val authService: AuthService,
 ) {
 
@@ -24,4 +24,4 @@ class AuthController(
     fun login(@Valid @RequestBody request: LoginRequest): AuthResponse {
         return authService.login(request)
     }
-} 
+}

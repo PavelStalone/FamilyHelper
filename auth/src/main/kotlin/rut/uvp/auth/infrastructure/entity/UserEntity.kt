@@ -1,10 +1,10 @@
-package rut.uvp.core.data.entity
+package rut.uvp.auth.infrastructure.entity
 
 import jakarta.persistence.*
 
 @Entity
 @Table(name = "users")
-data class User(
+internal data class UserEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
     @Column(unique = true, nullable = false)

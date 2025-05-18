@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import java.time.LocalDateTime
 
 @RestControllerAdvice
-class GlobalExceptionHandler {
+internal class GlobalExceptionHandler {
 
     data class ApiError(val timestamp: LocalDateTime = LocalDateTime.now(), val status: Int, val message: String)
 

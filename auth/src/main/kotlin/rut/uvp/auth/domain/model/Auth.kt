@@ -1,24 +1,20 @@
-package rut.uvp.auth.dto
+package rut.uvp.auth.domain.model
 
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 
 // Запрос на регистрацию
-data class RegisterRequest(
+internal data class RegisterRequest(
     @field:Email
     val email: String,
     @field:NotBlank
     val password: String,
     @field:NotBlank
     val name: String,
-    @field:NotBlank
-    val action: String, // "create" | "join"
-    val familyCode: String? = null,
-    val relation: String? = null,
 )
 
 // Запрос на вход
-data class LoginRequest(
+internal data class LoginRequest(
     @field:Email
     val email: String,
     @field:NotBlank
@@ -26,9 +22,7 @@ data class LoginRequest(
 )
 
 // Ответ с токеном
-data class AuthResponse(
+internal data class AuthResponse(
     val token: String,
     val userId: Long,
-    val familyId: Long?,
-    val familyCode: String?,
-) 
+)
