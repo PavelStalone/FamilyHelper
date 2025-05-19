@@ -12,14 +12,12 @@ dependencyManagement {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("org.springframework.retry:spring-retry:1.3.4")
+    implementation("org.springframework:spring-aspects")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
+    implementation("org.jsoup:jsoup:1.17.2")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-
-    implementation(project(":core:common"))
-    implementation(project(":core:ai"))
-} 
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+}
