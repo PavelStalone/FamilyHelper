@@ -18,3 +18,8 @@ logging:
     rut.uvp: INFO
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"
+
+deepsearch:
+  search-url: https://duckduckgo.com/html
+  cache-ttl: 1h
+  cache-max-size: 1000

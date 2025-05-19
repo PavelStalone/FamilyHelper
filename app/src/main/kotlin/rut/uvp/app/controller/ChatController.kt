@@ -2,16 +2,11 @@ package rut.uvp.app.controller
 
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import rut.uvp.core.common.log.Log
-import rut.uvp.search.service.ConversationFlowService
-import rut.uvp.search.service.DateSelectionService
-import rut.uvp.search.service.KudaGoService
-import rut.uvp.search.service.SearchQueryService
+import rut.uvp.search.model.FamilyLeisureRequest
+import rut.uvp.search.service.*
 import rut.uvp.search.tool.FamilyTools
 
 @RestController
@@ -19,40 +14,60 @@ import rut.uvp.search.tool.FamilyTools
 class ChatController(
     private val tools: FamilyTools,
     private val chatClient: ChatClient,
-    private val kudaGoService: KudaGoService,
-    private val searchQueryService: SearchQueryService,
+
+    private val activitySearchService: ActivitySearchService,
+
     private val dateSelectionService: DateSelectionService,
     private val conversationFlowService: ConversationFlowService,
 ) {
 
     @PostMapping(produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun sendMessage(@RequestBody messageRequest: MessageRequest): Flux<String> {
-        Log.v("message: $messageRequest")
+        Log.v("Incoming message: $messageRequest")
 
-        val response = chatClient.prompt(messageRequest.message)
+        // 1) Извлекаем структуру запроса пользователя
+        val draftReq: FamilyLeisureRequest =
+            conversationFlowService.parseUserMessage(messageRequest.message)
+
+        // 2) Автоподбор даты, если нужно
+        val finalReq =
+            if (draftReq.date.isNullOrBlank() || draftReq.date == "auto") {
+                val (date, _) = dateSelectionService.selectDate(
+                    draftReq.members?.map { it.role } ?: emptyList()
+                )
+                draftReq.copy(date = date)
+            } else draftReq
+
+        Log.v("Final leisure request: $finalReq")
+
+        // 3) Получаем мероприятия (DeepSearch → KudaGo fallback)
+        val events = activitySearchService.findActivities(finalReq)
+        Log.i("Suggested events: $events")
+
+        /* --------- два варианта ответа ---------
+           3.a) Вернуть список JSON'ом --> return ResponseEntity.ok(events)
+           3.b) Включить события в prompt LLM --> chatClient.prompt(...).tools(...).stream()
+         */
+
+        // --- пример 3.b --- добавляем события в prompt
+        val prompt = buildPromptWithEvents(messageRequest.message, events)
+
+        return chatClient
+            .prompt(prompt)
             .tools(tools)
             .stream()
             .content()
-
-//        val leisureRequest = conversationFlowService.parseUserMessage(messageRequest.message)
-//        val finalRequest = if (leisureRequest.date == null || leisureRequest.date == "auto") {
-//            val (date, timeRange) = dateSelectionService.selectDate(leisureRequest.members?.map { it.role }
-//                ?: emptyList())
-//            leisureRequest.copy(date = date)
-//        } else leisureRequest
-//        Log.v("finalRequest: $finalRequest")
-//
-//        val query = searchQueryService.buildKudaGoQuery(finalRequest)
-//        query.plus("location" to query["city"])
-//        query.filter { it.key != "city" }
-//
-//        val events = kudaGoService.searchEvents(query)
-//
-//        Log.i("events: $events")
-//
-//        return ResponseEntity.ok(events)
-        return response
     }
+
+    private fun buildPromptWithEvents(userMsg: String, events: List<Any>): String =
+        buildString {
+            appendLine(userMsg)
+            appendLine()
+            appendLine("Ниже список актуальных мероприятий для пользователя:")
+            events.forEachIndexed { i, e -> appendLine("${i + 1}. $e") }
+            appendLine()
+            appendLine("Ответь пользователю, используя эти данные.")
+        }
 
     data class MessageRequest(val message: String)
 }
