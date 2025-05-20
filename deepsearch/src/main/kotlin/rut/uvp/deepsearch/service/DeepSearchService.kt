@@ -1,26 +1,34 @@
 package rut.uvp.deepsearch.service
 
-import org.slf4j.LoggerFactory
-import org.springframework.cache.annotation.Cacheable
+import org.jsoup.Jsoup
 import org.springframework.stereotype.Service
-import rut.uvp.deepsearch.client.DuckDuckGoClient
-import rut.uvp.deepsearch.extractor.WebContentExtractor
+import rut.uvp.core.common.log.Log
+import rut.uvp.deepsearch.domain.repository.SearchRepository
+
+interface DeepSearchService {
+
+    suspend fun deepSearch(query: String): List<String>
+}
 
 @Service
-class DeepSearchService(
-    private val duckDuckGoClient: DuckDuckGoClient,
-    private val webContentExtractor: WebContentExtractor
-) {
-    private val log = LoggerFactory.getLogger(javaClass)
+internal class DeepSearchServiceImpl(
+    private val searchRepository: SearchRepository,
+) : DeepSearchService {
 
-    @Cacheable("deepSearchResults")
-    fun deepSearch(query: String): String? {
-        log.info("DeepSearch started for query: '{}'", query)
-        val url = duckDuckGoClient.searchFirstLink(query)
-        if (url.isNullOrBlank()) {
-            log.warn("No result URL found for query: '$query'")
-            return null
+    override suspend fun deepSearch(query: String): List<String> {
+        Log.i("DeepSearch started for query: $query")
+        val links = searchRepository.getLinks(query = query, size = 5)
+        Log.i("DeepSearch links: $links")
+
+        val result = links.map { link ->
+            Log.v("Start")
+            Jsoup.parse(searchRepository.getPage(link))
+                .body()
+                .text()
         }
-        return webContentExtractor.extractPlainText(url)
+
+        Log.i("Result parsing: $result")
+
+        return result
     }
 }
