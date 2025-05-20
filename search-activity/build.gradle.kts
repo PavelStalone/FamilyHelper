@@ -28,4 +28,5 @@ dependencies {
     implementation(project(":auth"))
     implementation(project(":family"))
     implementation(project(":calendar"))
+    implementation(project(":deepsearch"))
 }

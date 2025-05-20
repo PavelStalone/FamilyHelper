@@ -9,6 +9,7 @@ include(":search-activity")
 include(":calendar")
 include(":family")
 include(":auth")
+include(":deepsearch")
 
 include(":core:data")
 include(":core:common")
