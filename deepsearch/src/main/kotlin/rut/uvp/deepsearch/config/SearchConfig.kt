@@ -16,6 +16,9 @@ internal class SearchConfig {
 
     @Bean
     fun provideWebClient(): WebClient = WebClient.builder()
+        .codecs { configurer ->
+            configurer.defaultCodecs().maxInMemorySize(10 * 1024 * 1024)
+        }
         .clientConnector(ReactorClientHttpConnector(HttpClient.create().followRedirect(true)))
         .defaultHeader("User-Agent", "Mozilla/5.0 (compatible; DeepSearchBot/1.0)")
         .filter(decoder())
