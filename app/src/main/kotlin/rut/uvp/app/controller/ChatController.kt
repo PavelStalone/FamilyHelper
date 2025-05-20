@@ -20,7 +20,7 @@ class ChatController(
     private val tools: FamilyTools,
     private val chatClient: ChatClient,
 
-    private val deepSearchService: DeepSearchService,
+    private val deepSearchService: DeepSearchServiceis,
 
     private val dateSelectionService: DateSelectionService,
     private val conversationFlowService: ConversationFlowService,
