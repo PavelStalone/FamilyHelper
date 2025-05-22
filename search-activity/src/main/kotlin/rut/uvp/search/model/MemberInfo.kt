@@ -8,7 +8,6 @@ import rut.uvp.family.domain.model.Preference
 class MemberInfo(
     val user: User,
     val familyMember: FamilyMember,
-    val preference: List<Preference>,
     val calendarEvents: List<CalendarEvent>,
 ) {
 
@@ -28,7 +27,7 @@ class MemberInfo(
     override fun toString(): String {
         return """
             Имя: ${familyMember.name}
-            Предпочтения: [${preference.joinToString("; ") { pref -> pref.preferences }}]
+            Предпочтения: [${familyMember.preferences.joinToString("; ") { pref -> pref.preferences }}]
             Занятость: [${calendarEvents.joinToString("; ") { event -> "Название: ${event.title}, Описание: ${event.description}, Дата начала: ${event.start}, Дата окончания: ${event.end}" }}]
         """.trimIndent()
     }

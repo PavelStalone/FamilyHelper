@@ -5,6 +5,7 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
+import rut.uvp.core.common.log.Log
 import rut.uvp.deepsearch.domain.repository.SearchRepository
 
 @Component
@@ -13,6 +14,7 @@ internal class WebSearchRepositoryImpl(
 ) : SearchRepository {
 
     override suspend fun getLinks(query: String, size: Int): List<String> {
+        Log.v("url: https://duckduckgo.com/html?q=$query")
         val page = webClient.get()
             .uri("https://duckduckgo.com/html?q={query}", query)
             .accept(MediaType.TEXT_HTML)

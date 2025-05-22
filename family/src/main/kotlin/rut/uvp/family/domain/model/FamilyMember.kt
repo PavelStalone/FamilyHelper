@@ -5,7 +5,6 @@ data class FamilyMember(
     val name: String,
     val userId: String,
     val gender: Gender,
-    val family: Set<Family>,
     val relationship: Relationship,
     val preferences: List<Preference>,
 )

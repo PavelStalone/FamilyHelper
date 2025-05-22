@@ -27,6 +27,6 @@ dependencies {
 
     implementation(project(":search-activity"))
     implementation(project(":deepsearch"))
-
+    implementation(project(":family"))
     implementation(project(":auth"))
 }

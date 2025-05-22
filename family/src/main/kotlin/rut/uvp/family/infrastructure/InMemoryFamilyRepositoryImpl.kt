@@ -1,6 +1,7 @@
 package rut.uvp.family.infrastructure
 
 import org.springframework.stereotype.Component
+import rut.uvp.core.data.model.user.User
 import rut.uvp.family.domain.model.Family
 import rut.uvp.family.domain.model.FamilyMember
 import rut.uvp.family.domain.model.Gender
@@ -40,7 +41,7 @@ internal class InMemoryFamilyRepositoryImpl : FamilyRepository {
 
     override fun addMember(family: Family, member: FamilyMember) {
         store.getOrPut(family) { mutableListOf() }
-            .apply { add(member.copy(family = member.family + family)) }
+            .apply { add(member) }
     }
 
     override fun createFamily(owner: FamilyMember, familyName: String): Family {
