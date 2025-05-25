@@ -4,4 +4,5 @@ object ChatClientQualifier {
 
     const val QUERY_GENERATOR_CLIENT = "QueryGeneratorChatClient"
     const val ACTIVITY_FINDER_CLIENT = "ActivityFinderChatClient"
+    const val TEST_CLIENT = "TestClient"
 }

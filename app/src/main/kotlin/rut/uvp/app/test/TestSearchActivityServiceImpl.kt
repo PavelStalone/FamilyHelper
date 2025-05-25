@@ -1,9 +1,9 @@
-package rut.uvp.search.service
+package rut.uvp.app.test
 
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Service
+import rut.uvp.app.config.TestConfig
 import rut.uvp.auth.service.UserService
 import rut.uvp.calendar.service.CalendarService
 import rut.uvp.core.ai.config.ChatClientQualifier
@@ -15,28 +15,21 @@ import rut.uvp.family.domain.model.Relationship
 import rut.uvp.family.service.FamilyService
 import rut.uvp.search.model.FamilyMemberSearch
 import rut.uvp.search.model.MemberInfo
-
-interface SearchActivityService {
-
-    suspend fun findActivity(
-        city: String?,
-        context: String,
-        familyId: String,
-        endDate: String? = null,
-        startDate: String? = null,
-        preferences: List<String>,
-        members: List<FamilyMemberSearch>,
-    ): List<String>
-}
+import rut.uvp.search.service.SearchActivityService
 
 @Service
-@Primary
-internal class SearchActivityServiceImpl(
-    @Qualifier(ChatClientQualifier.QUERY_GENERATOR_CLIENT)
+@Qualifier(TestConfig.TEST)
+internal class TestSearchActivityServiceImpl(
+    @Qualifier(TestConfig.TEST)
+    private val testData: TestData,
+    @Qualifier(ChatClientQualifier.TEST_CLIENT)
     private val chatClient: ChatClient,
+    @Qualifier(TestConfig.TEST)
+    private val testLogger: TestLogger,
     private val userService: UserService,
     private val familyService: FamilyService,
     private val calendarService: CalendarService,
+    @Qualifier(TestConfig.TEST)
     private val deepSearchService: DeepSearchService,
 ) : SearchActivityService {
 
@@ -77,6 +70,8 @@ internal class SearchActivityServiceImpl(
                         |Информация от бота: $context
                     """.trimMargin()
             )
+            .system(testData.querySystemPrompt)
+            .advisors(TestLoggerAdvisor { testLogger.logQueryChat(it) })
             .call()
             .content()
         requireNotNull(query)

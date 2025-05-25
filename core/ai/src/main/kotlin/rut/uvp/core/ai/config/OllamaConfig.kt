@@ -205,4 +205,19 @@ internal class OllamaConfig {
 //            .defaultTools(systemTools)
             .build()
     }
+
+    @Bean
+    @Qualifier(ChatClientQualifier.TEST_CLIENT)
+    fun testChatClient(
+        chatModel: ChatModel,
+    ): ChatClient {
+        return ChatClient.builder(chatModel)
+            .defaultOptions(
+                OllamaOptions
+                    .builder()
+                    .temperature(0.0)
+                    .build()
+            )
+            .build()
+    }
 }

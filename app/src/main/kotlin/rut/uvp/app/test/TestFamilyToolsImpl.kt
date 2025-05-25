@@ -1,39 +1,26 @@
-package rut.uvp.search.tool
+package rut.uvp.app.test
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.runBlocking
 import org.springframework.ai.chat.model.ToolContext
 import org.springframework.ai.tool.annotation.Tool
 import org.springframework.ai.tool.annotation.ToolParam
-import org.springframework.context.annotation.Primary
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
+import org.springframework.web.context.annotation.SessionScope
+import rut.uvp.app.config.TestConfig
 import rut.uvp.core.common.log.Log
 import rut.uvp.search.model.FamilyMemberSearch
 import rut.uvp.search.service.SearchActivityService
-
-interface FamilyTools {
-
-    fun findActivities(
-        members: List<FamilyMemberSearch>,
-        startDate: String?,
-        endDate: String?,
-        preferences: List<String>,
-        city: String?,
-        context: String,
-        toolContext: ToolContext,
-    ): String
-
-    companion object {
-
-        const val FAMILY_ID = "familyId"
-    }
-}
+import rut.uvp.search.tool.FamilyTools
 
 
-@Primary
 @Component
-internal class FamilyToolsImpl(
-    private val searchActivityService: SearchActivityService
+@Qualifier(TestConfig.TEST)
+internal class TestFamilyToolsImpl(
+    private val testLogger: TestLogger,
+    @Qualifier(TestConfig.TEST)
+    private val searchActivityService: SearchActivityService,
 ) : FamilyTools {
 
     private val mapper = jacksonObjectMapper()
@@ -72,8 +59,11 @@ internal class FamilyToolsImpl(
     ): String {
         val familyId = toolContext.context[FamilyTools.FAMILY_ID] as String
 
-        Log.v(
+        Log.v("Test Tools: $familyId")
+
+        testLogger.logMainChat(
             """
+                === TestFamilyToolsImpl called ===
                 members: $members,
                 startDate: $startDate,
                 endDate: $endDate,
@@ -103,6 +93,13 @@ internal class FamilyToolsImpl(
             |Найденные активности: $activities
             |Используй все эти данные для составления рекомендаций. Также указывай ссылку на предложенное мероприятие (Она находится в поле url)
         """.trimMargin()
+        }.also {
+            testLogger.logMainChat(
+                """
+                    |=== TestFamilyToolsImpl result ===
+                    |${it.replace("\n", "|")}
+                """.trimMargin()
+            )
         }
     }
 }

@@ -18,6 +18,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+    implementation("org.jsoup:jsoup:1.17.2")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
@@ -27,6 +28,7 @@ dependencies {
 
     implementation(project(":search-activity"))
     implementation(project(":deepsearch"))
+    implementation(project(":calendar"))
     implementation(project(":family"))
     implementation(project(":auth"))
 }

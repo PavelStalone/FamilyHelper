@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
+import rut.uvp.app.test.TestData
 import rut.uvp.core.common.log.Log
 import rut.uvp.family.domain.model.FamilyMember
 import rut.uvp.family.domain.model.Gender
@@ -19,7 +20,8 @@ class FamilyApplication {
 
     @Bean
     fun familyCreator(
-        familyService: FamilyService
+        testData: TestData,
+        familyService: FamilyService,
     ) = CommandLineRunner { _ ->
         val father = FamilyMember(
             id = "TestFather",
@@ -43,6 +45,7 @@ class FamilyApplication {
         familyService.addMember(family, son)
 
         Log.i("TestFamily: $family")
+        testData.familyId = family.id
     }
 }
 
