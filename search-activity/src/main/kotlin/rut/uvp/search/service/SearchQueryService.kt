@@ -36,7 +36,7 @@ class SearchQueryService {
         )
         // Собираем интересы всех членов семьи
         val allInterests =
-            (request.members?.flatMap { it.interests ?: emptyList() } ?: emptyList()) + (request.preferences
+            (request.members.flatMap { it.familyMember.preferences }.map { it.preferences }) + (request.preferences
                 ?: emptyList())
 
         Log.v("allInterests: $allInterests")

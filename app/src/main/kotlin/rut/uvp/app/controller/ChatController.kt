@@ -1,5 +1,6 @@
 package rut.uvp.app.controller
 
+import kotlinx.datetime.Clock
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -31,8 +32,9 @@ class ChatController(
         Log.v("Incoming message: $messageRequest")
 
         return chatClient
-            .prompt(messageRequest.message)
+            .prompt(messageRequest.message + " Текущая дата и время: ${Clock.System.now()}")
             .tools(tools)
+            .toolContext(mapOf(FamilyTools.FAMILY_ID to messageRequest.familyId))
             .stream()
             .content()
     }
@@ -41,8 +43,11 @@ class ChatController(
     suspend fun getLinks(@RequestBody messageRequest: MessageRequest): ResponseEntity<Any> {
         Log.v("Incoming message: $messageRequest")
 
-        return ResponseEntity.ok(deepSearchService.deepSearch(messageRequest.message).toString())
+        return ResponseEntity.ok(deepSearchService.deepSearch(messageRequest.message))
     }
 
-    data class MessageRequest(val message: String)
+    data class MessageRequest(
+        val message: String,
+        val familyId: String,
+    )
 }

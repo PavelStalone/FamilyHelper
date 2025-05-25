@@ -11,6 +11,7 @@ dependencyManagement {
 }
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     api("org.springframework.ai:spring-ai-ollama-spring-boot-starter")
     api("org.springframework.ai:spring-ai-qdrant-store")
 

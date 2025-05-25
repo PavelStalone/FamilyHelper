@@ -21,8 +21,12 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    implementation(project(":core:ai"))
-    implementation(project(":deepsearch"))
     implementation(project(":core:common"))
+    implementation(project(":core:data"))
+    implementation(project(":core:ai"))
 
+    implementation(project(":auth"))
+    implementation(project(":family"))
+    implementation(project(":calendar"))
+    implementation(project(":deepsearch"))
 }

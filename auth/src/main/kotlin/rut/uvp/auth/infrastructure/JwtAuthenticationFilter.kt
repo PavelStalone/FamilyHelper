@@ -1,4 +1,4 @@
-package rut.uvp.auth.config
+package rut.uvp.auth.infrastructure
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest

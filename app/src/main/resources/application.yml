@@ -1,4 +1,7 @@
 spring:
+  mvc:
+    async:
+      request-timeout: 120000
   application:
     name: family
   httpclient:

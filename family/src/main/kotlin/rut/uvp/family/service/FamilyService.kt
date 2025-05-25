@@ -9,12 +9,13 @@ import rut.uvp.family.domain.repository.FamilyRepository
 
 interface FamilyService {
 
-    fun getFamilyById(familyId: String): Family?
+    fun findFamilyById(familyId: String): Family?
     fun createFamilyCode(family: Family): String
     fun findFamilyByCode(familyCode: String): Family?
     fun addMember(family: Family, member: FamilyMember)
     fun createFamily(owner: FamilyMember, familyName: String): Family
-    fun getMembersByRelationship(
+    fun findMemberByUserId(userId: String, family: Family): FamilyMember?
+    fun findMembersByRelationship(
         family: Family,
         relativeFamilyMember: FamilyMember,
         relationship: Relationship,
@@ -28,7 +29,7 @@ internal class FamilyServiceImpl(
     private val familyRepository: FamilyRepository,
 ) : FamilyService {
 
-    override fun getFamilyById(familyId: String): Family? {
+    override fun findFamilyById(familyId: String): Family? {
         return familyRepository.getById(familyId)
     }
 
@@ -48,7 +49,11 @@ internal class FamilyServiceImpl(
         return familyRepository.createFamily(owner, familyName)
     }
 
-    override fun getMembersByRelationship(
+    override fun findMemberByUserId(userId: String, family: Family): FamilyMember? {
+        return familyRepository.findMemberByUserId(userId, family)
+    }
+
+    override fun findMembersByRelationship(
         family: Family,
         relativeFamilyMember: FamilyMember,
         relationship: Relationship,

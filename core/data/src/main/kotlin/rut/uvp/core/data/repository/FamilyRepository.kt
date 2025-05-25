@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository
 import rut.uvp.core.data.entity.Family
 
 @Repository
-interface FamilyRepository : JpaRepository<Family, Long> {
+internal interface FamilyRepository : JpaRepository<Family, Long> {
     fun findByFamilyCode(familyCode: String): Family?
     fun existsByFamilyCode(familyCode: String): Boolean
 } 
