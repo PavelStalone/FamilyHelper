@@ -19,8 +19,8 @@ internal class UserServiceImpl(
 ) : UserService {
 
     override fun getCurrentUser(): User {
-//        val user = SecurityContextHolder.getContext().authentication.principal as? User
-        val user = userRepositoryJpa.findById(2).getOrNull()?.asDomain()
+        val user = SecurityContextHolder.getContext().authentication.principal as? User
+//        val user = userRepositoryJpa.findById(2).getOrNull()?.asDomain()
         requireNotNull(user) { "User is not authorized" }
 
         return user
