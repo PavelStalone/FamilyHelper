@@ -13,7 +13,6 @@ dependencyManagement {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -21,6 +20,9 @@ dependencies {
     implementation("org.jsoup:jsoup:1.17.2")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-security")
 
     implementation(project(":core:ai"))
     implementation(project(":core:data"))
