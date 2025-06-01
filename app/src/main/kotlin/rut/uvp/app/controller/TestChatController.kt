@@ -2,6 +2,7 @@ package rut.uvp.app.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
+import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.datetime.Clock
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.beans.factory.annotation.Qualifier
@@ -20,6 +21,7 @@ import rut.uvp.search.tool.FamilyTools
 
 @RestController
 @RequestMapping("test")
+@Tag(name = "Настройка моделей", description = "Смена системных промптов и их регулировка")
 class TestChatController(
     @Qualifier(TestConfig.TEST)
     private val tools: FamilyTools,

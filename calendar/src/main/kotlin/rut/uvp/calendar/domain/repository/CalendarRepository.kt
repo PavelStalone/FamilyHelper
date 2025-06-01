@@ -5,6 +5,7 @@ import rut.uvp.calendar.domain.model.CalendarEvent
 
 interface CalendarRepository {
 
+    fun removeEvent(userId: String, eventId: String)
     fun addEvent(userId: String, event: CalendarEvent)
     fun getEvents(userId: String, counts: Int): List<CalendarEvent>
     fun getEventsByRange(userId: String, dateRange: ClosedRange<Instant>): List<CalendarEvent>
