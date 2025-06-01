@@ -19,7 +19,7 @@ internal class SearchConfig {
     fun provideWebClient(): WebClient = WebClient.builder()
         .codecs { configurer -> configurer.defaultCodecs().maxInMemorySize(10 * 1024 * 1024) }
         .clientConnector(ReactorClientHttpConnector(httpClient))
-        .defaultHeader("User-Agent", "Mozilla/5.0 (compatible; DeepSearchBot/1.0)")
+        .defaultHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 OPR/118.0.0.0 (Edition Yx GX)")
 //        .filter(logRequest())
 //        .filter(logResponse())
         .build()
