@@ -64,6 +64,8 @@ class TestChatController(
 
     @PostMapping("json")
     suspend fun parseMessage(@RequestBody jsonString: String): ResponseEntity<String> {
+        Log.v("jsonString: $jsonString")
+
         return ResponseEntity.ok(
             run {
                 val jsonNode = mapper.readTree(jsonString)

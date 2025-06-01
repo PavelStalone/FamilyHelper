@@ -65,7 +65,8 @@ class TestLogger {
 
     val parseChat: Map<String, String>
         get() = _parseChat.let { log ->
+            val copy = log.toMap()
             _parseChat.clear()
-            log
+            copy
         }
 }
