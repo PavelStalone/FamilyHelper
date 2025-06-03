@@ -43,8 +43,7 @@ class ChatController(
             val content = chatClient
                 .prompt(messageRequest.message + " [Текущая дата и время: ${Clock.System.now()}]")
                 .tools(tools)
-                .toolContext(mapOf(FamilyTools.FAMILY_ID to testData.familyId))
-//            .toolContext(mapOf(FamilyTools.FAMILY_ID to messageRequest.familyId))
+                .toolContext(mapOf(FamilyTools.FAMILY_ID to messageRequest.familyId))
                 .call()
                 .content()
 

@@ -1,5 +1,6 @@
 package rut.uvp.app.test
 
+import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
@@ -44,7 +45,7 @@ internal class TestSearchActivityServiceImpl(
     ): List<String> = runCatching {
         Log.v("findActivity called for family: $familyId")
 
-        val user = userService.getCurrentUser()
+        val user = userService.getCurrentUserReactive().awaitSingle()
         val family = requireNotNull(familyService.findFamilyById(familyId))
         val userFamilyMember = familyService.findMemberByUserId(userId = user.id.toString(), family = family)
         requireNotNull(userFamilyMember)

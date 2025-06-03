@@ -50,7 +50,7 @@ internal class TestDeepSearchServiceImpl(
         coroutineScope {
             links
                 .map { link ->
-                    async(start = CoroutineStart.LAZY) { // TODO: Add batching strategy - shoplikpavel
+                    async {
                         runCatching {
                             Log.d("Start parsing: $link")
 
@@ -75,7 +75,7 @@ internal class TestDeepSearchServiceImpl(
                 .awaitAll()
                 .filterNotNull()
                 .map { (link, page) ->
-                    async(start = CoroutineStart.LAZY) {
+                    async {
                         runCatching {
                             testLogger.logDeepSearch(
                                 """
