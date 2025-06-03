@@ -10,6 +10,10 @@ internal class InMemoryCalendarRepositoryImpl : CalendarRepository {
 
     private val store: MutableMap<String, MutableSet<CalendarEvent>> = mutableMapOf()
 
+    override fun removeEvent(userId: String, eventId: String) {
+        store[userId]?.removeIf { event -> event.id == eventId }
+    }
+
     override fun addEvent(userId: String, event: CalendarEvent) {
         store.getOrPut(userId) { mutableSetOf() }.add(event)
     }

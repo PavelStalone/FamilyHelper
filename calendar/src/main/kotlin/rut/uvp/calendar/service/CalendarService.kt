@@ -7,6 +7,7 @@ import rut.uvp.calendar.domain.repository.CalendarRepository
 
 interface CalendarService {
 
+    fun removeEvent(userId: String, eventId: String)
     fun saveEvent(userId: String, event: CalendarEvent)
     fun getEvents(userId: String, counts: Int): List<CalendarEvent>
     fun getEventsByRange(userId: String, dateRange: ClosedRange<Instant>): List<CalendarEvent>
@@ -16,6 +17,10 @@ interface CalendarService {
 internal class CalendarServiceImpl(
     private val calendarRepository: CalendarRepository,
 ) : CalendarService {
+
+    override fun removeEvent(userId: String, eventId: String) {
+        calendarRepository.removeEvent(userId, eventId)
+    }
 
     override fun saveEvent(userId: String, event: CalendarEvent) {
         calendarRepository.addEvent(userId, event)

@@ -1,9 +1,10 @@
 package rut.uvp.calendar.domain.model
 
 import kotlinx.datetime.Instant
+import java.util.*
 
 data class CalendarEvent(
-    val id: String,
+    val id: String = UUID.randomUUID().toString(),
     val end: Instant,
     val title: String,
     val start: Instant,
@@ -15,6 +16,6 @@ data class CalendarEvent(
     }
 
     fun inRange(dateRange: ClosedRange<Instant>): Boolean {
-        return dateRange.contains(start) || dateRange.contains(end) || (start < dateRange.start && end > dateRange.endInclusive)
+        return dateRange.contains(start) || dateRange.contains(end) || (start <= dateRange.start && end >= dateRange.endInclusive)
     }
 }

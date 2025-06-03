@@ -102,6 +102,44 @@ internal class FamilyToolsImpl(
             """
             |Найденные активности: $activities
             |Используй все эти данные для составления рекомендаций. Также указывай ссылку на предложенное мероприятие (Она находится в поле url)
+            |Your response should be in JSON format.
+            |Do not include any explanations, only provide a RFC8259 compliant JSON response following this format without deviation.
+            |Do not include markdown code blocks in your response.
+            |Here is the JSON Schema instance your output must adhere to:
+            |```{
+            |  "type" : "object",
+            |  "properties" : {
+            |    "activities" : {
+            |      "type" : "array",
+            |      "items" : {
+            |        "type" : "object",
+            |        "properties" : {
+            |          "dateRange" : {
+            |            "type" : "string"
+            |          },
+            |          "description" : {
+            |            "type" : "string"
+            |          },
+            |          "location" : {
+            |            "type" : "string"
+            |          },
+            |          "title" : {
+            |            "type" : "string"
+            |          },
+            |          "url" : {
+            |            "type" : "string"
+            |          }
+            |        },
+            |        "additionalProperties" : false
+            |      }
+            |    },
+            |    "message" : {
+            |      "type" : "string"
+            |    }
+            |  },
+            |  "additionalProperties" : false
+            |}```
+            |В ответе укажи только JSON структуру без ``` и подписей
         """.trimMargin()
         }
     }
