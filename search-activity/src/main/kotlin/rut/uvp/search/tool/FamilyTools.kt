@@ -137,7 +137,8 @@ internal class FamilyToolsImpl(
             |      "type" : "string"
             |    }
             |  },
-            |  "additionalProperties" : false
+            |  "additionalProperties" : false,
+            |  "required": ["activities", "message"]
             |}```
             |В ответе укажи только JSON структуру без ``` и подписей
         """.trimMargin()
