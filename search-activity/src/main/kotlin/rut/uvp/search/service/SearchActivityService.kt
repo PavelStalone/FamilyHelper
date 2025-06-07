@@ -89,7 +89,7 @@ internal class SearchActivityServiceImpl(
             SearchRequest.builder()
                 .query(query)
                 .topK(MIN_ACTIVITY_COUNT)
-                .similarityThreshold(0.6)
+                .similarityThreshold(0.7)
                 .build()
         )
         Log.d("Found ${storeActivities.size} from store: $storeActivities")
