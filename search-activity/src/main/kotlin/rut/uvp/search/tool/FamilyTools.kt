@@ -33,7 +33,7 @@ interface FamilyTools {
 @Primary
 @Component
 internal class FamilyToolsImpl(
-    private val searchActivityService: SearchActivityService
+    private val searchActivityService: SearchActivityService,
 ) : FamilyTools {
 
     private val mapper = jacksonObjectMapper()

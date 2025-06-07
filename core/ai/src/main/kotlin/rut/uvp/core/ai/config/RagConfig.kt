@@ -1,7 +1,13 @@
 package rut.uvp.core.ai.config
 
+import io.qdrant.client.QdrantClient
 import org.springframework.ai.chat.client.advisor.api.*
 import org.springframework.ai.chat.model.MessageAggregator
+import org.springframework.ai.embedding.EmbeddingModel
+import org.springframework.ai.vectorstore.VectorStore
+import org.springframework.ai.vectorstore.qdrant.QdrantVectorStore
+import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import reactor.core.publisher.Flux
 import rut.uvp.core.common.log.Log
@@ -9,6 +15,16 @@ import rut.uvp.core.common.log.Log
 @Configuration
 class RagConfig {
 
+    @Bean
+    @Qualifier("ActivityStore")
+    fun provideQdrantVectorStore(
+        qdrantClient: QdrantClient,
+        embeddingModel: EmbeddingModel,
+    ): VectorStore = QdrantVectorStore
+        .builder(qdrantClient, embeddingModel)
+        .collectionName("activity_collection")
+        .initializeSchema(true)
+        .build()
 }
 
 class LoggerAdvisor() : CallAroundAdvisor, StreamAroundAdvisor {

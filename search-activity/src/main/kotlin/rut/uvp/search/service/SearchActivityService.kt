@@ -1,6 +1,8 @@
 package rut.uvp.search.service
 
+import kotlinx.datetime.Clock
 import org.springframework.ai.chat.client.ChatClient
+import org.springframework.ai.vectorstore.SearchRequest
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Service
@@ -15,6 +17,7 @@ import rut.uvp.family.domain.model.Relationship
 import rut.uvp.family.service.FamilyService
 import rut.uvp.search.model.FamilyMemberSearch
 import rut.uvp.search.model.MemberInfo
+import kotlin.time.Duration.Companion.days
 
 interface SearchActivityService {
 
@@ -38,6 +41,7 @@ internal class SearchActivityServiceImpl(
     private val familyService: FamilyService,
     private val calendarService: CalendarService,
     private val deepSearchService: DeepSearchService,
+    private val activityStoreService: ActivityStoreService,
 ) : SearchActivityService {
 
     override suspend fun findActivity(
@@ -81,13 +85,27 @@ internal class SearchActivityServiceImpl(
             .content()
         requireNotNull(query)
 
-        deepSearchService.deepSearch(query).also {
-            Log.i("Find activities (${it.size}): $it")
-        }
+        val storeActivities = activityStoreService.search(
+            SearchRequest.builder()
+                .query(query)
+                .topK(MIN_ACTIVITY_COUNT)
+                .similarityThreshold(0.6)
+                .build()
+        )
+        Log.d("Found ${storeActivities.size} from store: $storeActivities")
+
+        if (storeActivities.size >= MIN_ACTIVITY_COUNT) return@runCatching storeActivities
+
+        val newActivities = deepSearchService.deepSearch(query)
+        Log.i("Found activities (${newActivities.size}) from network: $newActivities")
+        newActivities.forEach { activityStoreService.addWithTTL(it, Clock.System.now().plus(5.days)) }
+
+        storeActivities + newActivities
     }
         .onFailure { throwable ->
             Log.e(throwable, "Failed in findActivity")
         }
+        .onSuccess { Log.d("Return ${it.size} activities") }
         .getOrDefault(emptyList())
         .map { it.toString() }
 
@@ -129,4 +147,9 @@ internal class SearchActivityServiceImpl(
                 Log.e(throwable, "failed find member: $member")
             }.getOrNull()
         }
+
+    companion object {
+
+        const val MIN_ACTIVITY_COUNT = 10
+    }
 }
